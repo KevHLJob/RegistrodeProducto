@@ -7,7 +7,7 @@ namespace Entity.Users
     public class CLsUserE
     {
         #region  private Attributes
-
+        //variables
         private byte Idusuario;
         private string Nombre,Primer_Apellido,Segundo_Apellido;
         private DateTime FechaNacimiento;
@@ -19,7 +19,7 @@ namespace Entity.Users
 
 
         #endregion
-
+        // el encapsulamiento
         #region  public Attributes
         public byte Idusuario1 { get => Idusuario; set => Idusuario = value; }
         public string Nombre1 { get => Nombre; set => Nombre = value; }

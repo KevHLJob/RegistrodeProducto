@@ -52,11 +52,14 @@ namespace DataAccess.DataBase
         #endregion
 
         #region Private Void
+        //metodo privado para crear la conexion, referenciando un objetodatabase
         private void Createconnection(ref ClsDataBase objDataBase)
         {
-            switch (objDataBase.nameDB)
+            //obtenemos el objeto NameDB, en caso de que cumpla con la condición
+            switch (objDataBase.NameDB)
             {
                 case "DB_BasePruebas":
+                    //Crea la conexion por medio del nombre obtenido y la cadena conexion
                     objDataBase.objsqlConnection = new SqlConnection
                         (Properties.Settings.Default.cadenaConection_DB_BasePruebas);
                     break;
@@ -80,10 +83,11 @@ namespace DataAccess.DataBase
         }
         private void AddParameters(ref ClsDataBase objDataBase)
         {
+            // si es diferente o igual a null
             if (objDataBase.dtParameters != null)
             {
                 SqlDbType DataTypeSQL = new SqlDbType();
-
+                // realiza un recorrido por item en cada campo para verificar que tipo de datos es
                 foreach (DataRow item in objDataBase.DtParameters.Rows)
                 {
                     switch (item[1])
@@ -146,9 +150,10 @@ namespace DataAccess.DataBase
                         default:
                             break;
                     }
-
+                    // si es escalar
                     if (objDataBase.Scalar)
                     {
+                        
                         if (item[2].ToString().Equals(string.Empty))
                         {
                             objDataBase.objsqlCommand.Parameters.Add(item[0].ToString(), DataTypeSQL).Value = DBNull.Value;
@@ -176,18 +181,24 @@ namespace DataAccess.DataBase
         }
         private void PrepareconnectionDataBase(ref ClsDataBase objDataBase)
         {
+            //se llama el metodo de creación referenciando el objeto database
             Createconnection(ref objDataBase);
+            //llama el metodo de creación referenciando el objeto database
             ValidationconnectionDB(ref objDataBase);
 
         }
         private void ExecuteDataAdapter(ref ClsDataBase objDataBase)
         {
+            //try para capturar cualquier error
             try
             {
+                //llamada del metodo de preparar conexion
                 PrepareconnectionDataBase(ref objDataBase);
+                //se crea un nuevo sql data adapter para pasarle el nombre del proceso almacenado y la conexion
                 objDataBase.objsqlAdapter = new SqlDataAdapter(objDataBase.nameSp, objDataBase.objsqlConnection);
                 objDataBase.objsqlAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
                 AddParameters(ref objDataBase);
+                // se instancia, los datos obtenidos y la tabla se llenan con obj sql adapter
                 objDataBase.dsResult = new DataSet();
                 objDataBase.objsqlAdapter.Fill(objDataBase.dsResult, objDataBase.tableName);
             }
@@ -207,18 +218,22 @@ namespace DataAccess.DataBase
         {
             try
             {
+                //prepara la conexion de la base de datos, referencia al objeto database
                 PrepareconnectionDataBase(ref objDataBase);
                 objDataBase.objsqlCommand = new SqlCommand(objDataBase.nameSp, objDataBase.objsqlConnection);
                 objDataBase.objsqlCommand.CommandType = CommandType.StoredProcedure;
                 AddParameters(ref objDataBase);
 
+                //si el objeto es scalar true
                 if (objDataBase.scalar)
                 {
+                    // en valorscalar se guarda el executeScalar
                     objDataBase.valorScalar = objDataBase.objsqlCommand.ExecuteScalar().ToString().Trim();
 
                 }
                 else
                 {
+                    //sino ejecuta el command execute scalar del objeto referenciado
                     objDataBase.objsqlCommand.ExecuteScalar();
                 }
             }
@@ -240,12 +255,15 @@ namespace DataAccess.DataBase
         #region Public Void
         public void CRUD(ref ClsDataBase objDataBase)
         {
+            // si el objeto es true scalar
             if (objDataBase.scalar)
             {
+               //ejecuta el command del objeto database
                 ExecuteCommand(ref objDataBase);
             }
             else
             {
+                //sino el data adapter del objeto database
                 ExecuteDataAdapter(ref objDataBase);
             }
         }

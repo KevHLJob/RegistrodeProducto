@@ -1,5 +1,5 @@
-﻿using BusinessLogic.Users;
-using Entity.Users;
+﻿using BusinessLogic.Users;//referencia negocio
+using Entity.Users;//referencia entity
 using System;
 using System.Windows.Forms;
 
@@ -14,9 +14,11 @@ namespace FrmProducto.Principal
         public FrmUsuarios()
         {
             InitializeComponent();
+            //llamada de metodo para cargar en data grid view los usuarios
             CargarListaUsuarios();
         }
 
+        //metodo para caragar usuarios
         private void CargarListaUsuarios()
         {
             objUsuarios = new CLsUserE();
@@ -30,7 +32,7 @@ namespace FrmProducto.Principal
                 MessageBox.Show(objUsuarios.MessageError,"Mensaje de error",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //evento para agregar usuarios
         private void BtnAgregar_Click(object sender, System.EventArgs e)
         {
             objUsuarios = new CLsUserE()
@@ -54,7 +56,7 @@ namespace FrmProducto.Principal
 
             }
         }
-
+        //evento para actualizar usuarios
         private void BtnActualizar_Click(object sender, System.EventArgs e)
         {
             objUsuarios = new CLsUserE()
@@ -78,7 +80,7 @@ namespace FrmProducto.Principal
 
             }
         }
-
+        //metodo de selección de registro
         private void DgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -106,7 +108,7 @@ namespace FrmProducto.Principal
                 throw ex;
             }
         }
-
+        //evento de eliminar usuarios
         private void BtnEliminar_Click(object sender, EventArgs e)
         {
             objUsuarios = new CLsUserE()
@@ -124,6 +126,11 @@ namespace FrmProducto.Principal
                 MessageBox.Show(objUsuarios.MessageError, "Mensaje de error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
+        }
+
+        private void FrmUsuarios_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
